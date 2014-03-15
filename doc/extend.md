@@ -10,7 +10,7 @@ everything fits with everyone's needs.
 
 * [App Stores](#app-stores)
 * [DNS prefetching](#dns-prefetching)
-* [Google Universal Analytics](#google-universal-analytics)
+* [Google Analytics augments](#google-analytics-augments)
 * [Internet Explorer](#internet-explorer)
 * [Miscellaneous](#miscellaneous)
 * [News Feeds](#news-feeds)
@@ -131,6 +131,7 @@ on blogs.msdn.com)
 * http://dayofjs.com/videos/22158462/web-browsers_alex-russel
 
 
+<<<<<<< HEAD
 ## Google Universal Analytics
 
 ### More tracking settings
@@ -162,6 +163,41 @@ before sending any events/pagviews. In use it looks like this:
 ga('create','UA-XXXXX-X');
 ga('set', 'anonymizeIp', true);
 ga('send', 'pageview');
+=======
+## Google Analytics augments
+
+### More tracking settings
+
+The [optimized Google Analytics
+snippet](http://mathiasbynens.be/notes/async-analytics-snippet) included with
+HTML5 Boilerplate includes something like this:
+
+```js
+var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+```
+
+In case you need more settings, just extend the array literal instead of
+[`.push()`ing to the
+array](http://mathiasbynens.be/notes/async-analytics-snippet#dont-push-it)
+afterwards:
+
+```js
+var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview'], ['_setAllowAnchor', true]];
+```
+
+### Anonymize IP addresses
+
+In some countries, no personal data may be transferred outside jurisdictions
+that do not have similarly strict laws (i.e. from Germany to outside the EU).
+Thus a webmaster using the Google Analytics script may have to ensure that no
+personal (trackable) data is transferred to the US. You can do that with [the
+`_gat.anonymizeIp`
+option](http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gat.html#_gat._anonymizeIp).
+In use it looks like this:
+
+```js
+var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_gat._anonymizeIp'], ['_trackPageview']];
+>>>>>>> 7c748651c0860ec21a1c745df9209e81798f4fba
 ```
 
 ### Track jQuery AJAX requests in Google Analytics
@@ -176,16 +212,26 @@ Add this to `plugins.js`:
  * Log all jQuery AJAX requests to Google Analytics
  * See: http://www.alfajango.com/blog/track-jquery-ajax-requests-in-google-analytics/
  */
+<<<<<<< HEAD
 if (typeof ga !== "undefined" && ga !== null) {
     $(document).ajaxSend(function(event, xhr, settings){
         ga('send', 'pageview', settings.url);
+=======
+if (typeof _gaq !== "undefined" && _gaq !== null) {
+    $(document).ajaxSend(function(event, xhr, settings){
+        _gaq.push(['_trackPageview', settings.url]);
+>>>>>>> 7c748651c0860ec21a1c745df9209e81798f4fba
     });
 }
 ```
 
 ### Track JavaScript errors in Google Analytics
 
+<<<<<<< HEAD
 Add this function after `ga` is defined:
+=======
+Add this function after `_gaq` is defined:
+>>>>>>> 7c748651c0860ec21a1c745df9209e81798f4fba
 
 ```js
 (function(window){
@@ -197,6 +243,7 @@ Add this function after `ga` is defined:
         };
     window.onerror = function (message, file, line, column) {
         var host = link(file).hostname;
+<<<<<<< HEAD
         ga('send', {
           'hitType': 'event',
           'eventCategory': (host == window.location.hostname || host == undefined || host == '' ? '' : 'external ') + 'error',
@@ -206,6 +253,40 @@ Add this function after `ga` is defined:
         });
     };
 }(window));
+=======
+        _gaq.push([
+            '_trackEvent',
+            (host == window.location.hostname || host == undefined || host == '' ? '' : 'external ') + 'error',
+            message, file + ' LINE: ' + line + (column ? ' COLUMN: ' + column : ''), undefined, undefined, true
+        ]);
+    };
+}(window));
+```
+
+### Track page scroll
+
+Add this function after `_gaq` is defined:
+
+```js
+$(function(){
+    var isDuplicateScrollEvent,
+        scrollTimeStart = new Date,
+        $window = $(window),
+        $document = $(document),
+        scrollPercent;
+
+    $window.scroll(function() {
+        scrollPercent = Math.round(100 * ($window.height() + $window.scrollTop())/$document.height());
+        if (scrollPercent > 90 && !isDuplicateScrollEvent) { //page scrolled to 90%
+            isDuplicateScrollEvent = 1;
+            _gaq.push(['_trackEvent', 'scroll',
+                'Window: ' + $window.height() + 'px; Document: ' + $document.height() + 'px; Time: ' + Math.round((new Date - scrollTimeStart )/1000,1) + 's',
+                undefined, undefined, true
+            ]);
+        }
+    });
+});
+>>>>>>> 7c748651c0860ec21a1c745df9209e81798f4fba
 ```
 
 ### Track page scroll
@@ -364,6 +445,7 @@ You can read about this useful element and more techniques in
 
 
 ## Search
+<<<<<<< HEAD
 
 ### Direct search spiders to your sitemap
 
@@ -375,6 +457,19 @@ You can read about this useful element and more techniques in
 
 ### Hide pages from search engines
 
+=======
+
+### Direct search spiders to your sitemap
+
+[Learn how to make a sitemap](http://www.sitemaps.org/protocol.php)
+
+```html
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+```
+
+### Hide pages from search engines
+
+>>>>>>> 7c748651c0860ec21a1c745df9209e81798f4fba
 According to Heather Champ, former community manager at Flickr, you should not
 allow search engines to index your "Contact Us" or "Complaints" page if you
 value your sanity. This is an HTML-centric way of achieving that.
